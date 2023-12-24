@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script crossorigin src="https://unpkg.com/cachefirst@latest/cachefirst.min.js"></script>
+</head>
+<body>
+    <script>
+        function blobtobase64(response) {
+            if (response == null) return null;
+            const reader = new FileReader();
+            return new Promise((resolve, reject) => {
+                reader.onloadend = () => {
+                    if (reader.result) {
+                        resolve(reader.result.split(',')[1]);
+                    } else {
+                        reject(new Error('Error reading blob as data URL'));
+                    }
+                };
+                reader.readAsDataURL(response);
+            });
+
+        }
+
+        CacheFirst.fetch("https://unpkg.com/jquery@3.3.1/dist/jquery.js").text(script=>{
+            eval(script);
+        });
+
+        CacheFirst.fetch("http://localhost:3000/v1/json")
+            .json((data, hasDataModified, fullResponse) => {
+                document.body.innerHTML = document.body.innerHTML + "<br><br>" + JSON.stringify(data);
+            }
+            ).catch(error => {
+                console.log(error);
+            })
+
+
+        CacheFirst.fetch("http://localhost:3000/v1/blob")
+            .blob((data, hasDataModified) => {
+                blobtobase64(data).then(str => document.body.innerHTML = document.body.innerHTML + "<br><br>" + str);
+            }).catch(error => {
+                console.log(error);
+            })
+
+
+        CacheFirst.fetch("http://localhost:3000/v1/text")
+            .text((data, hasDataModified) => {
+                document.body.innerHTML = document.body.innerHTML + "<br><br>" + data;
+            }).catch(error => {
+                console.log(error);
+            });
+
+
+        CacheFirst.fetch("http://localhost:3000/v1/arrayBuffer")
+            .arrayBuffer((data, hasDataModified) => {
+                document.body.innerHTML = document.body.innerHTML + "<br><br>" + new Uint8Array(data);
+            });
+
+    </script>
+</body>
+
+</html>

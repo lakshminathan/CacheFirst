@@ -1,0 +1,26 @@
+{
+  "name": "cachefirst",
+  "version": "0.5.0",
+  "description": "CacheFirst is a ismorphic caching library that offers fluent APIs for caching JSON, Blob, Text, and ArrayBuffer data.",
+  "main": "cachefirst.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:lakshminathan/CacheFirst.git"
+  },
+  "keywords": [
+    "fetch",
+    "response",
+    "cache",
+    "localstorage",
+    "indexedDB"
+  ],
+  "author": "Lakshminathan S",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lakshminathan/CacheFirst/issues"
+  },
+  "homepage": "https://github.com/lakshminathan/CacheFirst#readme"
+}
