@@ -8,6 +8,9 @@
     <script crossorigin src="https://unpkg.com/cachefirst@latest/cachefirst.min.js"></script>
 </head>
 <body>
+    <h1>CacheFirst Demo</h1>
+    <p>This page demonstrates how to use the CacheFirst library to cache and fetch various data types.</p>
+    <div id="output"></div>
     <script>
         function blobtobase64(response) {
             if (response == null) return null;
@@ -22,41 +25,37 @@
                 };
                 reader.readAsDataURL(response);
             });
-
         }
 
-        CacheFirst.fetch("https://unpkg.com/jquery@3.3.1/dist/jquery.js").text(script=>{
+        // Fetch and cache a JS file as text
+        CacheFirst.fetch("https://unpkg.com/jquery@3.3.1/dist/jquery.js").text(script => {
             eval(script);
+            document.getElementById('output').innerHTML += '<b>Loaded jQuery from cache or network.</b><br>';
         });
 
-        CacheFirst.fetch("http://localhost:3000/v1/json")
+        // Fetch and cache JSON data
+        CacheFirst.fetch("https://jsonplaceholder.typicode.com/todos/1")
             .json((data, hasDataModified, fullResponse) => {
-                document.body.innerHTML = document.body.innerHTML + "<br><br>" + JSON.stringify(data);
-            }
-            ).catch(error => {
-                console.log(error);
+                document.getElementById('output').innerHTML += `<b>JSON Data:</b> <pre>${JSON.stringify(data, null, 2)}</pre>`;
             })
-
-
-        CacheFirst.fetch("http://localhost:3000/v1/blob")
-            .blob((data, hasDataModified) => {
-                blobtobase64(data).then(str => document.body.innerHTML = document.body.innerHTML + "<br><br>" + str);
-            }).catch(error => {
-                console.log(error);
-            })
-
-
-        CacheFirst.fetch("http://localhost:3000/v1/text")
-            .text((data, hasDataModified) => {
-                document.body.innerHTML = document.body.innerHTML + "<br><br>" + data;
-            }).catch(error => {
-                console.log(error);
+            .catch(error => {
+                document.getElementById('output').innerHTML += `<b>Error fetching JSON:</b> ${error}<br>`;
             });
 
+        // Fetch and cache Blob data (CORS-enabled image)
+        CacheFirst.fetch("https://picsum.photos/150")
+            .blob((data, hasDataModified) => {
+                blobtobase64(data).then(str => {
+                    document.getElementById('output').innerHTML += `<b>Blob Data (Base64):</b> <img src='data:image/jpeg;base64,${str}' /><br>`;
+                });
+            }).catch(error => {
+                document.getElementById('output').innerHTML += `<b>Error fetching Blob:</b> ${error}<br>`;
+            });
 
-        CacheFirst.fetch("http://localhost:3000/v1/arrayBuffer")
-            .arrayBuffer((data, hasDataModified) => {
-                document.body.innerHTML = document.body.innerHTML + "<br><br>" + new Uint8Array(data);
+        // Fetch and cache plain text
+        CacheFirst.fetch("https://www.w3.org/TR/PNG/iso_8859-1.txt")
+            .text((data, hasDataModified) => {
+                document.getElementById('output').innerHTML += `<b>Text Data:</b> <pre>${data.substring(0, 200)}...</pre>`;
             });
 
     </script>

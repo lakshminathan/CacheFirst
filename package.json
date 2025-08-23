@@ -1,11 +1,9 @@
 {
   "name": "cachefirst",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "CacheFirst is a ismorphic caching library that offers fluent APIs for caching JSON, Blob, Text, and ArrayBuffer data.",
   "main": "cachefirst.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\""
-  },
+  "types": "index.d.ts",
   "repository": {
     "type": "git",
     "url": "git@github.com:lakshminathan/CacheFirst.git"
@@ -18,9 +16,19 @@
     "indexedDB"
   ],
   "author": "Lakshminathan S",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/lakshminathan/CacheFirst/issues"
   },
-  "homepage": "https://github.com/lakshminathan/CacheFirst#readme"
+  "homepage": "https://github.com/lakshminathan/CacheFirst#readme",
+  "scripts": {
+    "test": "echo \"No tests yet.\"",
+    "build": "uglifyjs cachefirst.js -o cachefirst.min.js --compress --mangle",
+    "lint": "eslint cachefirst.js",
+    "prepublishOnly": "npm run lint && npm run build"
+  },
+  "devDependencies": {
+    "eslint": "^8.57.0",
+    "uglify-js": "^3.19.0"
+  }
 }
